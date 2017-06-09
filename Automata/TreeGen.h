@@ -6,6 +6,8 @@
 #define PIPE 1
 #define PROD 2
 #define CLOSURE 3
+#define OPEN_B 4
+#define CLOSE_B 5
 
 // ? and + oeprator to be seen later
 
@@ -26,4 +28,6 @@ typedef struct Node {
 
 void Update(stack < Node* > *T, int Mode);
 
-Node *TG(string Reg);
+Node *TG(string Reg, int start);
+
+void TreeDisplay(Node *T);

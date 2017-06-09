@@ -11,13 +11,15 @@ int main() {
     getline(cin, Reg);
 
     //Now call the regex tree gen function
-    Node *Tree = TG(Reg);
+    Node *Tree = TG(Reg, 0);
 	
-    cout << Tree -> Content << endl;
-	cout << Tree -> Left -> Content << endl;
-    cout << Tree -> Right -> Content << endl;
-    cout << Tree -> Right -> Left -> Content << endl;
-    cout << Tree -> Right -> Right -> Content << endl;
+
+    TreeDisplay(Tree);
+    //cout << Tree -> Content << endl;
+	//cout << Tree -> Left -> Content << endl;
+    //cout << Tree -> Right -> Content << endl;
+    //cout << Tree -> Right -> Left -> Content << endl;
+    //cout << Tree -> Right -> Right -> Content << endl;
     return 0;
 }
 
