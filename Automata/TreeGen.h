@@ -26,6 +26,9 @@ typedef struct Node {
 //We can use the stack variable to do the #1 Task
 //We need a function just to modify the tree stack as per our need
 
+//SOME PREREQ Functions Required
+int offset(int i, string S); // To get the next index
+
 void Update(stack < Node* > *T, int Mode);
 
 Node *TG(string Reg, int start);
