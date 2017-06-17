@@ -16,37 +16,76 @@ int offset(int i, string Reg) {
     return i;
 }
 
+string SpaceRemove(string Reg) {
+    //I dont think we can do in place removal without our algorithm being O(n^2)
+    //So we will use memory 
+    string Temp;
+    for(size_t i = 0; i < Reg.size(); i++) {
+        if((char)Reg[i] == ' ')
+            continue;
+        Temp.push_back(Reg[i]);    
+    }
+    Reg.clear();
+    for(size_t i = 0; i < Temp.size(); i++)
+        Reg.push_back(Temp[i]);
+    return Reg ;   
+}
 
+Node* SetNode(char C) {
+    Node *T = new Node;
+    T -> Content = C;
+    T -> Left = NULL;
+    T -> Right = NULL;
+    return T;
+}
 
 void Update(stack < Node* > *T, int mode) {
-    //For now we only have mode 1
-    if(mode == 1) {
-        Node *X  = T -> top();
-        T -> pop();
-        Node *Y = T -> top();
-        T -> pop();
-        Node *Z = T -> top();
-        T -> pop();
+    
+    switch(mode) {
+        case 1: {
+                Node *X  = T -> top();
+                T -> pop();
 
-        Y -> Right = X;
-        Y -> Left = Z;
-        T -> push(Y);
-    }
-    else if(mode == 2) {
-        Node *X = T -> top();
-        T -> pop();
+                Node *Y = T -> top();
+                T -> pop();
 
-        Node *Y = new Node;
-        Y -> Content = '.';
-        
-        Node *Z = T -> top();
-        T -> pop();
+                Node *Z = T -> top();
+                T -> pop();
 
-        Y -> Left = X;
-        Y -> Right = Z;
-        T -> push(Y);
+                Y -> Right = X;
+                Y -> Left = Z;
+                T -> push(Y);
+        }
+        break;
+        case 2: {
+                Node *X = T -> top();
+                T -> pop();
 
-        //cout << "HEY\n";
+                Node *Y = new Node;
+                Y -> Content = '.';
+                
+                Node *Z = T -> top();
+                T -> pop();
+
+                Y -> Right = X;
+                Y -> Left = Z;
+                T -> push(Y);
+
+                //cout << "HEY\n";
+        }
+        break;
+        case 3: {
+                Node *X = T -> top();
+                T -> pop();
+
+                Node *Y = T -> top();
+                T -> pop();
+
+                X -> Right = NULL;
+                X -> Left = Y;
+
+                T -> push(X);
+        }
     }
     return ;
 }
@@ -67,6 +106,8 @@ Node* TG(string Reg, int start) {
         //#6 Switch needs to be modified to just chekc the previous char state and then gg
 
         //#7 Note that we still use the advantage of having only 3 elements in stack
+
+    Reg = SpaceRemove(Reg);
 
     stack < Node* > Stck;
     int current = -1;
@@ -94,12 +135,8 @@ Node* TG(string Reg, int start) {
                         if(current == CHAR)
                             op_scan = PROD;
                         current = OPEN_B;
-
-                        Node *T = new Node;
-                        //cout << "Hiya" << endl;;
-                        T = TG(Reg, i + 1);
                         //cout << "Biya" << endl;
-                        Stck.push(T);
+                        Stck.push(TG(Reg, i + 1));
                         i = offset(i, Reg);
                         current = CHAR;
             }
@@ -112,18 +149,17 @@ Node* TG(string Reg, int start) {
                                     }
                             break;
 
+                            case '*': {op_scan = CLOSURE;
+                                        current = CLOSURE;}
+                            break;
+
                             default : {if(current == CHAR) //Sanity check if previous was a char
                                         op_scan = PROD;
                                         //cout << i << "k" << "\n";   
                                         current = CHAR;   
                                     }            
                         }
-
-                        Node *N = new Node;
-                        N -> Content = (char)Reg[i];
-                        N -> Left = NULL;
-                        N -> Right = NULL;    
-                        Stck.push(N);
+                        Stck.push(SetNode(Reg[i]));
                     }
             }
         
@@ -143,54 +179,78 @@ Node* TG(string Reg, int start) {
                     j++;
                     continue;
                 }
-                if(isalpha((char)Reg[j])) {
+                if((char)Reg[j] == '*') {
                     ch = 1;
-                    //cout << "Im hre\n";
-                    Node *M = new Node;
-                    M -> Content = (char)Reg[j];
-                    M -> Left = NULL;
-                    M -> Right = NULL;
-                    Stck.push(M);
+                    Stck.push(SetNode(Reg[j]));
+                    Update(&Stck, 3);
+                    j++;
+                    continue;
+                }
+                else if(isalpha((char)Reg[j])) {
+                    ch = 1;
+                    Stck.push(SetNode(Reg[j]));
+
+                    //This code snippet chekcs forward for Kleene Closure before doing product
+                    //If it exists update stack for the same and then update for product
+                    if((j + 1) < Reg.size()) {
+                        if((char)Reg[j + 1] == '*') {
+                            Stck.push(SetNode(Reg[j + 1]));
+                            Update(&Stck, 3);
+                            j++;
+                        }
+                    }
+
                     Update(&Stck, 2);
                     j++;
                     continue;
                 }    
                 else if((char)Reg[j] == '(') {
                     ch = 1;
-                    Node *T = new Node;
-                    T = TG(Reg, j + 1);
-                    Stck.push(T);
-
+                    Stck.push(TG(Reg, j + 1));
                     j = offset(j, Reg);
+                    
+                    if((j + 1) < Reg.size()) {
+                        if((char)Reg[j + 1] == '*') {
+                            Stck.push(SetNode(Reg[j + 1]));
+                            Update(&Stck, 3);
+                            j++;
+                        }
+                    }
+                    
                     Update(&Stck, 2);
                     //cout << Stck.size() << "h\n" << j << endl;;
                     //TreeDisplay(Stck.top());
+                    
                     j++;
                     continue;
                 } 
                 break;
             }
-            //cout << "j " << j << "\n";
             if(ch)
                 i = j - 1;
             current = -1;
             op_scan = -1;
-            //cout << "Here" << endl;
-            //TreeDisplay(Stck.top());
-            //cout << Stck.size() << endl;
             Update(&Stck, 1);
-            //TreeDisplay(Stck.top());
-            //cout << Stck.size() << endl;
         }
-        
-        if(op_scan == PROD) {
+        else if(op_scan == PROD) {
+            if((i + 1) < Reg.size()) {
+                if((char)Reg[i + 1] == '*') {
+                    Stck.push(SetNode(Reg[i + 1]));
+                    Update(&Stck, 3);
+                    i++;
+                }
+            }
+            Update(&Stck, 2);
             current = CHAR; //Since if we find another char ahead then that too is to be multiplied with this
             op_scan = -1;
-            Update(&Stck, 2);
+        }
+        else if(op_scan == CLOSURE) {
+            Update(&Stck, 3);
+            current = CHAR;
+            op_scan = -1;
         }
  
     }
-    //Note that no error checking is done for now. Later when it works for all operators we will consider error checking
     return Stck.top();
 }
 
@@ -209,11 +269,6 @@ void TreeDisplay(Node *T) {
     TreeDisplay(T -> Right);       
 }
 
-/*
-int main() {
-    return 0;
-}
-*/
 
 //#NOTE : Make sure to change all of the continuous if else statements to Switch for better understandibility of code
 //#NOTE : The current code is not so readable, will make sure to organize it after today's work
