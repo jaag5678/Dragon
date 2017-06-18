@@ -1,5 +1,6 @@
 //We will first define a tree data structure
-
+#ifndef _TREE_GEN_
+#define _TREE_GEN_
 //for a node of a tree 
 #include"Tree.h"
 #define CHAR 0
@@ -17,4 +18,4 @@ void Update(stack < Node* > *T, int Mode);
 
 Node *TG(string Reg, int start);
 
-void TreeDisplay(Node *T);
+#endif

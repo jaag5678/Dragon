@@ -1,5 +1,6 @@
 
 #include"TreeGen.h"
+#include"TreeExtract.h"
 int main() {
     
     //cout << "HIAY" << "\n";
@@ -13,8 +14,11 @@ int main() {
     //Now call the regex tree gen function
     Node *Tree = TG(Reg, 0);
 	
-
+    
+    UpdateDetails(Tree);
+    
     TreeDisplay(Tree);
+    TreeNodeDetails(Tree);
     //cout << Tree -> Content << endl;
 	//cout << Tree -> Left -> Content << endl;
     //cout << Tree -> Right -> Content << endl;

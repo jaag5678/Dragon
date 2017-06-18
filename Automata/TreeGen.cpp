@@ -254,20 +254,7 @@ Node* TG(string Reg, int start) {
     return Stck.top();
 }
 
-void TreeDisplay(Node *T) {
-    //We will not write now a full flegded working of diaplying a tree
-    // for now we will just hardcode the cout statements accordingly
-    if(T == NULL)
-        return;
-    cout << T -> Content << " ";
-    if(T -> Left)
-        cout << T -> Left -> Content << " ";
-    if(T -> Right)
-        cout << T -> Right -> Content;     
-    cout << "\n";
-    TreeDisplay(T -> Left);
-    TreeDisplay(T -> Right);       
-}
+
 
 
 //#NOTE : Make sure to change all of the continuous if else statements to Switch for better understandibility of code
