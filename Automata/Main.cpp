@@ -1,6 +1,7 @@
 
 #include"TreeGen.h"
 #include"TreeExtract.h"
+
 int main() {
     
     //cout << "HIAY" << "\n";
@@ -19,6 +20,8 @@ int main() {
     
     TreeDisplay(Tree);
     TreeNodeDetails(Tree);
+    DisplayCharHash();
+    FPosTable();
     //cout << Tree -> Content << endl;
 	//cout << Tree -> Left -> Content << endl;
     //cout << Tree -> Right -> Content << endl;

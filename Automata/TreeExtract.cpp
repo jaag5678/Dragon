@@ -1,8 +1,8 @@
 #include"TreeExtract.h"
 
+vector < set < int > > FollowPosTable(26);
 
-//Table *CharHash = new Table[26];
-
+Table *CharHash = new Table[26];
 bool Nullable(Node *T) {
     return T -> null;
 }
@@ -19,11 +19,12 @@ set < int > FollowPosition(Node *T) {
     return T -> FollowPos;
 }
 
-/*
+
 void UpdateTable(char C, int X) {
+    CharHash[(int)(C - 'a')].C = C;
     CharHash[(int)(C - 'a')].Num.insert(X);
 }
-*/
+
 void UpdateDetails(Node *T) {
     //The first part of this function is to understand that the leaaves have immediate vaules to the details and the 
     //Subsequent nodes have detials derived recursively from them
@@ -36,14 +37,15 @@ void UpdateDetails(Node *T) {
         T -> null = false;
         //cout << "HI" << endl;
         T -> H.push_back(2);
-        cout << T -> Content << endl;
+        //cout << T -> Content << endl;
         T -> FirstPos.insert(Z);
         //cout << "HI" << endl;
         T -> LastPos.insert(Z);
-        //UpdateTable(T -> Content, Z);
-        Z++;
         
-        //We also could keep a simple hash table to store the mapping of char to numbers
+        //Hash table to store the mappings
+        UpdateTable(T -> Content, Z);
+        Z++;
+            
         //cout << T -> Content << endl;
         return; 
     }
@@ -86,7 +88,8 @@ void UpdateDetails(Node *T) {
                     for(I = Y.begin(); I != Y.end(); I++)
                         T -> LastPos.insert(*I);    
                             
-
+                    //There wont be any follow position for this, since its an Or operator, so nothing follows it
+                    //Once firstposition is occupied
 
             }
         break;
@@ -96,7 +99,7 @@ void UpdateDetails(Node *T) {
                     //For first postition
                     //If the left is Nullable then even the right can be at the first position of the subexp
                     if(Nullable(T -> Left)) {
-                        cout << "KKK\n";
+                        //cout << "KKK\n";
                         if(T -> Left)
                             X = FirstPosition(T -> Left);
                         if(T -> Right)    
@@ -130,6 +133,16 @@ void UpdateDetails(Node *T) {
                         for(I = X.begin(); I != X.end(); I++)
                             T -> LastPos.insert(*I);
                     }
+
+                    //For followpos
+                    //For every element in firstpos of this node, its followpos is the firstpos of 
+                    X = LastPosition(T -> Left);
+                    Y = FirstPosition(T -> Right);
+
+                    set < int > :: iterator I_2;
+                    for(I = X.begin(); I != X.end(); I++) 
+                        for(I_2 = Y.begin(); I_2 != Y.end(); I_2++) 
+                            FollowPosTable[*I].insert(*I_2);
             }
 
         break;
@@ -141,6 +154,18 @@ void UpdateDetails(Node *T) {
                     T -> FirstPos = FirstPosition(T -> Left);
 
                     T -> LastPos = LastPosition(T -> Left);
+
+
+                    //For followposition
+
+                    X = LastPosition(T -> Left);
+                    Y = FirstPosition(T -> Left);
+                    set < int > :: iterator I_2;
+
+                    for(I = X.begin(); I != X.end(); I++) 
+                        for(I_2 = Y.begin(); I_2 != Y.end(); I_2++)
+                            FollowPosTable[*I].insert(*I_2);
+
             }
 
         break;

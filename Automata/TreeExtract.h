@@ -4,11 +4,9 @@
 #include"Tree.h"
 
 //Data structure to store mapping of char to number
-typedef struct Table {
-    char C;
-    set < int > Num;
-}Table;
 
+//#THis is DONE for NOW
+//Although slight testing and code optimization remains
 //This header file will contain functions to extract details from the syntax tree generated viz.
 //#1 Nullable
 //#2 FirstPos

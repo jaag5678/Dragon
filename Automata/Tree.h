@@ -24,7 +24,18 @@ typedef struct Node {
     //Which is why we have used int pointer, we will express terminals as numbers 
 }Node;
 
+typedef struct Table {
+    char C;
+    set < int > Num;
+}Table;
+
+extern Table *CharHash; //For now just the lowercase letters
+                                //Later update for more than that
+extern vector < set < int > >  FollowPosTable;                                
+
+
 void TreeDisplay(Node *T);
 void TreeNodeDetails(Node *T);
-
+void DisplayCharHash();
+void FPosTable();
 #endif

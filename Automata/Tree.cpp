@@ -34,6 +34,29 @@ void TreeNodeDetails(Node *T) {
 
     TreeNodeDetails(T -> Left);
     TreeNodeDetails(T -> Right);
+}
 
+void DisplayCharHash() {
+    set < int > :: iterator It;
+    for(size_t i = 0; i < 26; i++) {
+        if(!CharHash[i].Num.size())
+            continue;
+        cout << CharHash[i].C << " ";
+        for(It = CharHash[i].Num.begin(); It != CharHash[i].Num.end(); It++)
+            cout << *It << " ";
+        cout << "\n";    
+    }
+}
 
+void FPosTable() {
+    set < int > :: iterator It;
+    
+    for(size_t i = 0; i < FollowPosTable.size(); i++) {
+        if(!FollowPosTable[i].size())
+            continue;
+        cout << "g" << i << " ";
+        for(It = FollowPosTable[i].begin(); It != FollowPosTable[i].end(); It++)
+            cout << *It << " ";
+        cout << "\n";    
+    }
 }
