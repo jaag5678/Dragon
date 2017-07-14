@@ -1,8 +1,12 @@
 #include"TreeExtract.h"
 
-vector < set < int > > FollowPosTable(26);
+int NoOfChar = 1;
 
-Table *CharHash = new Table[26];
+set < int > Dummy;
+vector < set < int > > FollowPosTable(1);
+
+//Note to self. Change to vector and keep dynamic size of the Char Hash table
+Table *CharHash = new Table[27];
 bool Nullable(Node *T) {
     return T -> null;
 }
@@ -15,15 +19,12 @@ set < int > LastPosition(Node *T) {
     return T -> LastPos;
 }
 
-set < int > FollowPosition(Node *T) {
-    return T -> FollowPos;
-}
-
-
 void UpdateTable(char C, int X) {
     CharHash[(int)(C - 'a')].C = C;
     CharHash[(int)(C - 'a')].Num.insert(X);
 }
+
+
 
 void UpdateDetails(Node *T) {
     //The first part of this function is to understand that the leaaves have immediate vaules to the details and the 
@@ -45,6 +46,10 @@ void UpdateDetails(Node *T) {
         //Hash table to store the mappings
         UpdateTable(T -> Content, Z);
         Z++;
+        NoOfChar++;
+
+        set < int > Temp;
+        FollowPosTable.push_back(Temp);
             
         //cout << T -> Content << endl;
         return; 
@@ -140,9 +145,10 @@ void UpdateDetails(Node *T) {
                     Y = FirstPosition(T -> Right);
 
                     set < int > :: iterator I_2;
-                    for(I = X.begin(); I != X.end(); I++) 
+                    for(I = X.begin(); I != X.end(); I++) {     
                         for(I_2 = Y.begin(); I_2 != Y.end(); I_2++) 
                             FollowPosTable[*I].insert(*I_2);
+                    }        
             }
 
         break;
@@ -162,9 +168,10 @@ void UpdateDetails(Node *T) {
                     Y = FirstPosition(T -> Left);
                     set < int > :: iterator I_2;
 
-                    for(I = X.begin(); I != X.end(); I++) 
-                        for(I_2 = Y.begin(); I_2 != Y.end(); I_2++)
-                            FollowPosTable[*I].insert(*I_2);
+                    for(I = X.begin(); I != X.end(); I++) {
+                        for(I_2 = Y.begin(); I_2 != Y.end(); I_2++)  
+                           FollowPosTable[*I].insert(*I_2);
+                    }
 
             }
 

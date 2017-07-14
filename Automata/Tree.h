@@ -18,7 +18,6 @@ typedef struct Node {
     bool null; // if a node is nullable
     set < int > FirstPos; //Char that could come in the first position for the subexp rooted at node
     set < int > LastPos;  //Char that could end the exp rooted at node
-    set < int > FollowPos; //Char that could follow the subexp
     vector < int > H;
     //Note that we need to now consider every leaf as a unique element though the char might be the same
     //Which is why we have used int pointer, we will express terminals as numbers 
@@ -29,13 +28,18 @@ typedef struct Table {
     set < int > Num;
 }Table;
 
+//NOTE TO SELF -> THis part needs to be changed to vector later
 extern Table *CharHash; //For now just the lowercase letters
                                 //Later update for more than that
-extern vector < set < int > >  FollowPosTable;                                
+extern vector < set < int > > FollowPosTable;  
+extern int NoOfChar;                              
 
 
 void TreeDisplay(Node *T);
 void TreeNodeDetails(Node *T);
 void DisplayCharHash();
 void FPosTable();
+char GetChar(int I);
+//int FollowPosExist(char C);
+
 #endif

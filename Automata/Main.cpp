@@ -1,7 +1,7 @@
 
 #include"TreeGen.h"
 #include"TreeExtract.h"
-
+#include "Fa.h"
 int main() {
     
     //cout << "HIAY" << "\n";
@@ -22,6 +22,8 @@ int main() {
     TreeNodeDetails(Tree);
     DisplayCharHash();
     FPosTable();
+
+    GenerateDFA(Tree);
     //cout << Tree -> Content << endl;
 	//cout << Tree -> Left -> Content << endl;
     //cout << Tree -> Right -> Content << endl;

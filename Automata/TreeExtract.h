@@ -19,6 +19,7 @@ set < int > FirstPosition(Node *T);
 set < int > LastPosition(Node *T);
 set < int > FollowPosition(Node *T);
 
+
 #endif
 
 //Later we wull use those details to generate NFA and DFA enitirely from scratch
